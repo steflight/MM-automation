@@ -7,13 +7,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-      - "5000:5000"
+      - "5005:5005"  # Port pour le débogage à distance
     environment:
       - SPRING_PROFILES_ACTIVE=dev
     volumes:
       - ./:/app:delegated
-      - ~/.m2:/root/.m2:delegated
-    user: myuser
+      - ~/.m2:/home/appuser/.m2:delegated
+    user: appuser
     networks:
       - spring-network
 

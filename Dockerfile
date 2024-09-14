@@ -1,19 +1,21 @@
 FROM eclipse-temurin:17-jdk-focal
- 
+
 WORKDIR /app
- 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
 
+# Créer un utilisateur non-root avec un UID/GID explicite
+RUN groupadd -g 1000 appgroup && \
+    useradd -u 1000 -g appgroup -m appuser
+
+COPY --chown=appuser:appgroup .mvn/ .mvn
+COPY --chown=appuser:appgroup mvnw pom.xml ./
+
+# Donner les permissions nécessaires
 RUN chmod +x mvnw
-RUN chown -R myuser:myuser /app
 
-USER myuser
-
-RUN ls -l mvnw
+USER appuser
 
 RUN ./mvnw dependency:go-offline
- 
-COPY --chown=myuser:myuser src ./src
- 
+
+COPY --chown=appuser:appgroup src ./src
+
 CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"]
