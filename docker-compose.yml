@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "5000:5000"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    volumes:
+      - ./:/app
+      - ~/.m2:/root/.m2
+    networks:
+      - spring-network
+
+networks:
+  spring-network:
+    driver: bridge
