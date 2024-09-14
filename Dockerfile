@@ -6,10 +6,14 @@ COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 
 RUN chmod +x mvnw
-RUN ls -l mvnw 
+RUN chown -R myuser:myuser /app
+
+USER myuser
+
+RUN ls -l mvnw
 
 RUN ./mvnw dependency:go-offline
  
-COPY src ./src
+COPY --chown=myuser:myuser src ./src
  
 CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"]

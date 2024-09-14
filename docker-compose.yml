@@ -11,8 +11,9 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=dev
     volumes:
-      - ./:/app
-      - ~/.m2:/root/.m2
+      - ./:/app:delegated
+      - ~/.m2:/root/.m2:delegated
+    user: myuser
     networks:
       - spring-network
 
